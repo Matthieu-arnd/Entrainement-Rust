@@ -1,4 +1,5 @@
 use std::string;
+use std::io;
 
 #[derive(Debug)]
 enum TaskStatus {
@@ -52,7 +53,24 @@ impl Task {
 fn main() {
     let mut mission  = Task::init();
     let date = Date::init();
-    mission = Task::new(String::from("tache1"), TaskStatus::ToDo, 1, date);
+    print!("Entrer le nom de la tâche\r\n");
+    let mut name = String::new();
+    let mut priority = String::new();
+    let mut status = String::new();
+    let mut enum_status = TaskStatus::ToDo;
+    io::stdin().read_line(&mut name).expect("Erreur de lecture");
+    print!("Entrer la prioritée\r\n");
+    io::stdin().read_line(&mut priority).expect("Erreur de lecture");
+    print!("Entrer le status\r\n");
+    io::stdin().read_line(&mut status).expect("Erreur de lecture");
+ 
+    match status.trim(){
+        "ToDo" => enum_status=TaskStatus::ToDo,
+        "InProgress" => enum_status=TaskStatus::InProgress,
+        "Done" => enum_status=TaskStatus::Done ,
+        _ => println!("Status incorrect") ,
+    }
+    mission = Task::new(name.trim().to_string(), enum_status, priority.trim().parse().unwrap(), date);
     println!("{:#?}",mission);
 
 }
