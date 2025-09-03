@@ -52,16 +52,19 @@ impl Task {
 
 fn main() {
     let mut mission  = Task::init();
-    let date = Date::init();
-    print!("Entrer le nom de la tâche\r\n");
+    let mut date = Date::init();
+    let mut string_date = String::new();
     let mut name = String::new();
     let mut priority = String::new();
     let mut status = String::new();
     let mut enum_status = TaskStatus::ToDo;
+    
+
+    print!("Entrer le nom de la tâche\r\n");
     io::stdin().read_line(&mut name).expect("Erreur de lecture");
     print!("Entrer la prioritée\r\n");
     io::stdin().read_line(&mut priority).expect("Erreur de lecture");
-    print!("Entrer le status\r\n");
+    print!("Entrer le status (ToDo,InProgress,Done)\r\n");
     io::stdin().read_line(&mut status).expect("Erreur de lecture");
  
     match status.trim(){
@@ -70,6 +73,10 @@ fn main() {
         "Done" => enum_status=TaskStatus::Done ,
         _ => println!("Status incorrect") ,
     }
+    print!("Entrer la date (j/m/a)\r\n");
+    io::stdin().read_line(&mut string_date).expect("Erreur de lecture");
+    let element: Vec<&str> = string_date.trim().split('/').collect();
+    date = Date::new(element[0].parse().unwrap(), element[1].parse().unwrap(), element[2].parse().unwrap());
     mission = Task::new(name.trim().to_string(), enum_status, priority.trim().parse().unwrap(), date);
     println!("{:#?}",mission);
 
